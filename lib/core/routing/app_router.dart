@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
+import '../../data/local/tables/session_table.dart';
+import '../../features/home/presentation/home_screen.dart';
 import '../../features/onboarding/presentation/onboarding_screen.dart';
+import '../services/session_provider.dart';
 import '../theme/theme.dart';
 import '../widgets/widgets.dart';
 
@@ -10,19 +13,46 @@ part 'app_router.g.dart';
 
 /// Root router. Routes are added feature-by-feature as each one is built.
 ///
-/// `/showcase` is a dev-only design-system sanity check, not a real
-/// screen — every route that doesn't have its destination built yet
-/// (post-onboarding, for now) lands there instead of a dead end.
+/// Gate: `/login` is only reachable when this device hasn't completed
+/// onboarding yet ([SessionRepository.getAuthMode] returns null);
+/// everywhere else redirects there until it has. Once a session exists,
+/// `/login` (and bare `/`) redirect to `/home` instead. `/showcase` is a
+/// dev-only design-system sanity check, not a real screen.
 @Riverpod(keepAlive: true)
 GoRouter appRouter(Ref ref) {
+  final sessionRepository = ref.watch(sessionRepositoryProvider);
+
   return GoRouter(
     initialLocation: '/login',
-    redirect: (context, state) => state.uri.path == '/' ? '/login' : null,
+    redirect: (context, state) async {
+      // Falls back to "no session" on any read error (e.g. the database
+      // isn't reachable yet) rather than leaving the router stuck with
+      // nothing to show while an unhandled Future sits there rejected.
+      bool hasSession;
+      try {
+        hasSession = await sessionRepository.getAuthMode() != null;
+      } catch (_) {
+        hasSession = false;
+      }
+      final onLogin = state.uri.path == '/login';
+
+      if (state.uri.path == '/') return hasSession ? '/home' : '/login';
+      if (!hasSession && !onLogin) return '/login';
+      if (hasSession && onLogin) return '/home';
+      return null;
+    },
     routes: [
       GoRoute(
         path: '/login',
-        builder: (context, state) => OnboardingScreen(onContinue: () => context.go('/showcase')),
+        builder: (context, state) => OnboardingScreen(
+          onUseWithoutAccount: () async {
+            await sessionRepository.setAuthMode(AuthMode.none);
+            if (context.mounted) context.go('/home');
+          },
+          onContinue: () => context.go('/showcase'),
+        ),
       ),
+      GoRoute(path: '/home', builder: (context, state) => const HomeScreen()),
       GoRoute(
         path: '/showcase',
         builder: (context, state) => const _PlaceholderHome(),

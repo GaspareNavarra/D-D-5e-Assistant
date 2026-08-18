@@ -8,15 +8,18 @@ import '../application/auth_feature_flags.dart';
 /// Entry point of the app: pick how to sign in, or skip straight into
 /// offline-first local use.
 ///
-/// There's no auth backend yet — the email/password step below is a
-/// local stand-in that just calls [onContinue] once both fields are
-/// filled in, ready to be wired to a real one later. Google/Apple are
+/// Only [onUseWithoutAccount] is wired to something real right now (it
+/// persists the choice and lands on the real home screen) — that's the
+/// path currently being built out. Email/password and Google/Apple come
+/// next, one at a time; until then [onContinue] (used by the email form
+/// stub) is a placeholder with nowhere real to go. Google/Apple are
 /// visible per [AuthFeatureFlags] but inert until that's worth the
 /// developer-account cost (see that file).
 class OnboardingScreen extends StatefulWidget {
+  final VoidCallback onUseWithoutAccount;
   final VoidCallback onContinue;
 
-  const OnboardingScreen({super.key, required this.onContinue});
+  const OnboardingScreen({super.key, required this.onUseWithoutAccount, required this.onContinue});
 
   @override
   State<OnboardingScreen> createState() => _OnboardingScreenState();
@@ -95,7 +98,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                         : _ChoiceButtons(
                             key: const ValueKey('choice'),
                             onEmail: () => setState(() => _showEmailForm = true),
-                            onContinue: widget.onContinue,
+                            onUseWithoutAccount: widget.onUseWithoutAccount,
                           ),
                   ),
                   const SizedBox(height: AppSpacing.lg),
@@ -116,9 +119,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
 class _ChoiceButtons extends StatelessWidget {
   final VoidCallback onEmail;
-  final VoidCallback onContinue;
+  final VoidCallback onUseWithoutAccount;
 
-  const _ChoiceButtons({super.key, required this.onEmail, required this.onContinue});
+  const _ChoiceButtons({super.key, required this.onEmail, required this.onUseWithoutAccount});
 
   @override
   Widget build(BuildContext context) {
@@ -153,7 +156,7 @@ class _ChoiceButtons extends StatelessWidget {
           child: AppTertiaryButton(
             label: 'Usa senza account',
             icon: PhosphorIconsRegular.cloudSlash,
-            onPressed: onContinue,
+            onPressed: onUseWithoutAccount,
           ),
         ),
       ],

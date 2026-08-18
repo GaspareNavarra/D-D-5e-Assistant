@@ -4,6 +4,7 @@ import 'package:drift_flutter/drift_flutter.dart';
 import 'tables/card_and_notes_tables.dart';
 import 'tables/character_tables.dart';
 import 'tables/reference_tables.dart';
+import 'tables/session_table.dart';
 
 part 'database.g.dart';
 
@@ -23,6 +24,7 @@ part 'database.g.dart';
     CharacterInventory,
     GeneratedCards,
     CharacterBuildNotes,
+    LocalSessions,
   ],
 )
 class AppDatabase extends _$AppDatabase {
@@ -31,6 +33,10 @@ class AppDatabase extends _$AppDatabase {
   /// For tests: pass an in-memory or otherwise custom executor directly.
   AppDatabase.withExecutor(super.executor);
 
+  // Still schema v1: nothing has shipped with this schema yet, so new
+  // tables are added directly here rather than via an onUpgrade step.
+  // Once a version is in a real install, bump this and add a migration
+  // instead of editing v1's shape.
   @override
   int get schemaVersion => 1;
 
