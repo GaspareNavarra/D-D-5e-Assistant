@@ -1,0 +1,78 @@
+# Miscellaneous
+*.class
+*.log
+*.pyc
+*.swp
+.DS_Store
+.atom/
+.build/
+.buildlog/
+.history
+.svn/
+.swiftpm/
+migrate_working_dir/
+
+# IntelliJ related
+*.iml
+*.ipr
+*.iws
+.idea/
+
+# The .vscode folder contains launch configuration and tasks you configure in
+# VS Code which you may wish to be included in version control, so this line
+# is commented out by default.
+#.vscode/
+
+# Flutter/Dart/Pub related
+**/doc/api/
+**/ios/Flutter/.last_build_id
+.dart_tool/
+.flutter-plugins-dependencies
+.pub-cache/
+.pub/
+/build/
+/coverage/
+
+# Symbolication related
+app.*.symbols
+
+# Obfuscation related
+app.*.map.json
+
+# Android Studio will place build artifacts here
+/android/app/debug
+/android/app/profile
+/android/app/release
+
+# Claude Code local-only config (personal permissions/session state; the
+# shared .claude/settings.json, if any, is fine to commit)
+.claude/settings.local.json
+.claude/scheduled_tasks.lock
+
+# Widget Preview related
+.widget_preview/
+
+# Secrets — API keys/credentials must never be committed, not even test ones.
+# flutter_secure_storage keeps the Gemini key in the OS keychain/keystore at
+# runtime, but these patterns guard against anyone hardcoding one on disk.
+.env
+.env.*
+*.env
+**/secrets.dart
+**/secrets/
+**/*_secrets.dart
+android/key.properties
+android/app/*.jks
+android/app/*.keystore
+*.jks
+*.keystore
+*.pem
+*.p12
+google-services.json
+GoogleService-Info.plist
+
+# Local SQLite databases (the Drift DB normally lives in the app's
+# per-platform data dir, outside the repo, but guard against stray copies).
+*.sqlite
+*.sqlite3
+*.db
