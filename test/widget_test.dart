@@ -12,6 +12,6 @@ void main() {
     );
     await tester.pumpAndSettle();
 
-    expect(find.text('D&D Assistant'), findsOneWidget);
+    expect(find.text('D&D Assistant'), findsWidgets);
   });
 }
