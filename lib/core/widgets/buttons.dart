@@ -7,6 +7,14 @@ double _buttonHeight(BuildContext context) {
   return width < AppDimens.breakpointCompact ? AppDimens.buttonHeightMobile : AppDimens.buttonHeightDesktop;
 }
 
+Widget _labelWithIcon(String label, IconData? icon) {
+  if (icon == null) return Text(label);
+  return Row(
+    mainAxisSize: MainAxisSize.min,
+    children: [Icon(icon, size: AppIconSize.dense), const SizedBox(width: AppSpacing.xs), Text(label)],
+  );
+}
+
 /// Primary action: outline on the accent color — never filled, never a
 /// gradient. Height is 40 on phone widths, 36 from tablet up.
 class AppPrimaryButton extends StatelessWidget {
@@ -29,12 +37,7 @@ class AppPrimaryButton extends StatelessWidget {
           foregroundColor: scheme.primary,
           padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md),
         ),
-        child: icon == null
-            ? Text(label)
-            : Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [Icon(icon, size: AppIconSize.dense), const SizedBox(width: AppSpacing.xs), Text(label)],
-              ),
+        child: _labelWithIcon(label, icon),
       ),
     );
   }
@@ -45,12 +48,16 @@ class AppPrimaryButton extends StatelessWidget {
 class AppSecondaryButton extends StatelessWidget {
   final String label;
   final VoidCallback? onPressed;
+  final IconData? icon;
 
-  const AppSecondaryButton({super.key, required this.label, this.onPressed});
+  const AppSecondaryButton({super.key, required this.label, this.onPressed, this.icon});
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(height: _buttonHeight(context), child: OutlinedButton(onPressed: onPressed, child: Text(label)));
+    return SizedBox(
+      height: _buttonHeight(context),
+      child: OutlinedButton(onPressed: onPressed, child: _labelWithIcon(label, icon)),
+    );
   }
 }
 
@@ -58,11 +65,15 @@ class AppSecondaryButton extends StatelessWidget {
 class AppTertiaryButton extends StatelessWidget {
   final String label;
   final VoidCallback? onPressed;
+  final IconData? icon;
 
-  const AppTertiaryButton({super.key, required this.label, this.onPressed});
+  const AppTertiaryButton({super.key, required this.label, this.onPressed, this.icon});
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(height: _buttonHeight(context), child: TextButton(onPressed: onPressed, child: Text(label)));
+    return SizedBox(
+      height: _buttonHeight(context),
+      child: TextButton(onPressed: onPressed, child: _labelWithIcon(label, icon)),
+    );
   }
 }

@@ -2,28 +2,36 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
+import '../../features/onboarding/presentation/onboarding_screen.dart';
 import '../theme/theme.dart';
 import '../widgets/widgets.dart';
 
 part 'app_router.g.dart';
 
-/// Root router. Routes are added feature-by-feature as each one is built;
-/// for now this only wires up a placeholder home route so the app has
-/// somewhere to land.
+/// Root router. Routes are added feature-by-feature as each one is built.
+///
+/// `/showcase` is a dev-only design-system sanity check, not a real
+/// screen — every route that doesn't have its destination built yet
+/// (post-onboarding, for now) lands there instead of a dead end.
 @Riverpod(keepAlive: true)
 GoRouter appRouter(Ref ref) {
   return GoRouter(
     routes: [
       GoRoute(
         path: '/',
+        builder: (context, state) => OnboardingScreen(onContinue: () => context.go('/showcase')),
+      ),
+      GoRoute(
+        path: '/showcase',
         builder: (context, state) => const _PlaceholderHome(),
       ),
     ],
   );
 }
 
-/// Temporary showcase of the design system while the real screens are
-/// being built one by one — swapped out once onboarding/ exists.
+/// Design-system showcase / temporary post-onboarding landing spot while
+/// the real screens (character creation, sheet, spellbook, ...) are
+/// being built one by one.
 class _PlaceholderHome extends StatefulWidget {
   const _PlaceholderHome();
 
