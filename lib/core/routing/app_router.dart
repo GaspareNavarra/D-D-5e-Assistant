@@ -16,9 +16,11 @@ part 'app_router.g.dart';
 @Riverpod(keepAlive: true)
 GoRouter appRouter(Ref ref) {
   return GoRouter(
+    initialLocation: '/login',
+    redirect: (context, state) => state.uri.path == '/' ? '/login' : null,
     routes: [
       GoRoute(
-        path: '/',
+        path: '/login',
         builder: (context, state) => OnboardingScreen(onContinue: () => context.go('/showcase')),
       ),
       GoRoute(

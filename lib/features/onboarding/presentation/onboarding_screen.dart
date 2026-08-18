@@ -73,7 +73,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     child: Icon(PhosphorIconsRegular.diceSix, color: scheme.onPrimary, size: 28),
                   ),
                   const SizedBox(height: AppSpacing.lg),
-                  Text('Compagno del Tavolo', style: textTheme.headlineMedium, textAlign: TextAlign.center),
+                  Text('D&D Assistant', style: textTheme.headlineMedium, textAlign: TextAlign.center),
                   const SizedBox(height: AppSpacing.sm),
                   Text(
                     'Personaggi, incantesimi e campagne D&D 5e, sempre a portata di mano — anche offline.',
