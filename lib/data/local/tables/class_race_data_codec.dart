@@ -16,13 +16,24 @@ class ClassData {
   /// 'none' | 'partial' | 'full'.
   final String spellcasting;
 
-  const ClassData({required this.savingThrows, required this.spellcasting});
+  /// How many skills the player picks at creation.
+  final int skillChoices;
+
+  const ClassData({required this.savingThrows, required this.spellcasting, this.skillChoices = 2});
 
   bool get isCaster => spellcasting != 'none';
+
+  /// The level spells become available: 1 for full casters, 2 for
+  /// partial (Ranger/Paladin-style) casters, null for non-casters.
+  int? get spellcastingFromLevel => switch (spellcasting) {
+    'full' => 1,
+    'partial' => 2,
+    _ => null,
+  };
 }
 
-String classDataJson({required List<String> savingThrows, required String spellcasting}) {
-  return jsonEncode({'savingThrows': savingThrows, 'spellcasting': spellcasting});
+String classDataJson({required List<String> savingThrows, required String spellcasting, int skillChoices = 2}) {
+  return jsonEncode({'savingThrows': savingThrows, 'spellcasting': spellcasting, 'skillChoices': skillChoices});
 }
 
 ClassData decodeClassData(String? json) {
@@ -31,6 +42,7 @@ ClassData decodeClassData(String? json) {
   return ClassData(
     savingThrows: (map['savingThrows'] as List<dynamic>? ?? []).cast<String>(),
     spellcasting: map['spellcasting'] as String? ?? 'none',
+    skillChoices: map['skillChoices'] as int? ?? 2,
   );
 }
 
