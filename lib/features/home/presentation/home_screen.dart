@@ -1,23 +1,29 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:phosphor_icons/phosphor_icons.dart';
 
+import '../../../core/services/catalog_providers.dart';
 import '../../../core/theme/theme.dart';
 import '../../../core/widgets/widgets.dart';
+import '../../../data/repositories/character_repository.dart';
 
 /// Real (if minimal) landing screen for a device that has completed
-/// onboarding: an empty local library of characters and campaigns,
-/// with the entry points that'll open the character-creation wizard and
-/// campaign-creation flow once those exist.
+/// onboarding: the local library of characters (empty state until the
+/// first one is saved) and campaigns (still a stub — campaign creation
+/// isn't built yet).
 ///
-/// This is deliberately not the full [ResponsiveScaffold] shell yet —
-/// Scheda/Grimorio/Card don't have anything to navigate to until the
-/// character-creation and spellbook features are built, and a nav bar
-/// with dead destinations would be worse than no nav bar.
-class HomeScreen extends StatelessWidget {
+/// Deliberately not the full [ResponsiveScaffold] shell yet —
+/// Grimorio/Card don't have anything to navigate to until the spellbook
+/// and cards features are built, and a nav bar with dead destinations
+/// would be worse than no nav bar.
+class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final charactersAsync = ref.watch(charactersListProvider);
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('D&D Assistant'),
@@ -32,12 +38,18 @@ class HomeScreen extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                _EmptyStateCard(
-                  icon: PhosphorIconsRegular.userCircle,
-                  title: 'Nessun personaggio ancora',
-                  description: 'Crea il tuo primo personaggio con la creazione guidata.',
-                  actionLabel: 'Crea personaggio',
-                  onAction: () => _showComingSoon(context, 'La creazione guidata del personaggio'),
+                charactersAsync.when(
+                  data: (characters) => characters.isEmpty
+                      ? _EmptyStateCard(
+                          icon: PhosphorIconsRegular.userCircle,
+                          title: 'Nessun personaggio ancora',
+                          description: 'Crea il tuo primo personaggio con la creazione guidata.',
+                          actionLabel: 'Crea personaggio',
+                          onAction: () => context.go('/characters/new'),
+                        )
+                      : _CharacterList(characters: characters, onAddAnother: () => context.go('/characters/new')),
+                  loading: () => const Padding(padding: EdgeInsets.all(AppSpacing.lg), child: LinearProgressIndicator()),
+                  error: (e, _) => Text('Errore nel caricamento dei personaggi: $e'),
                 ),
                 const SizedBox(height: AppSpacing.md),
                 _EmptyStateCard(
@@ -57,6 +69,56 @@ class HomeScreen extends StatelessWidget {
 
   void _showComingSoon(BuildContext context, String what) {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('$what arriva a breve.')));
+  }
+}
+
+class _CharacterList extends StatelessWidget {
+  final List<CharacterSummary> characters;
+  final VoidCallback onAddAnother;
+
+  const _CharacterList({required this.characters, required this.onAddAnother});
+
+  @override
+  Widget build(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
+    final scheme = Theme.of(context).colorScheme;
+
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(AppSpacing.md),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text('I tuoi personaggi', style: textTheme.titleMedium),
+            const SizedBox(height: AppSpacing.sm),
+            for (final c in characters)
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: AppSpacing.xs),
+                child: Row(
+                  children: [
+                    Icon(PhosphorIconsRegular.userCircle, size: AppIconSize.standard, color: scheme.primary),
+                    const SizedBox(width: AppSpacing.sm),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(c.base.name, style: textTheme.bodyLarge),
+                          Text(
+                            '${c.raceName ?? '—'} · ${c.className ?? '—'} · Livello ${c.instance.level}',
+                            style: textTheme.bodySmall?.copyWith(color: scheme.onSurface.withValues(alpha: 0.6)),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            const SizedBox(height: AppSpacing.sm),
+            Align(alignment: Alignment.centerLeft, child: AppSecondaryButton(label: 'Nuovo personaggio', onPressed: onAddAnother)),
+          ],
+        ),
+      ),
+    );
   }
 }
 

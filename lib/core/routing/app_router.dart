@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../data/local/tables/session_table.dart';
+import '../../features/character_creation/presentation/character_creation_screen.dart';
 import '../../features/home/presentation/home_screen.dart';
 import '../../features/onboarding/presentation/onboarding_screen.dart';
 import '../services/session_provider.dart';
@@ -53,6 +54,7 @@ GoRouter appRouter(Ref ref) {
         ),
       ),
       GoRoute(path: '/home', builder: (context, state) => const HomeScreen()),
+      GoRoute(path: '/characters/new', builder: (context, state) => const CharacterCreationScreen()),
       GoRoute(
         path: '/showcase',
         builder: (context, state) => const _PlaceholderHome(),

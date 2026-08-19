@@ -2843,6 +2843,76 @@ class $CharacterInstancesTable extends CharacterInstances
     type: DriftSqlType.int,
     requiredDuringInsert: false,
   );
+  static const VerificationMeta _strengthMeta = const VerificationMeta(
+    'strength',
+  );
+  @override
+  late final GeneratedColumn<int> strength = GeneratedColumn<int>(
+    'strength',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(10),
+  );
+  static const VerificationMeta _dexterityMeta = const VerificationMeta(
+    'dexterity',
+  );
+  @override
+  late final GeneratedColumn<int> dexterity = GeneratedColumn<int>(
+    'dexterity',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(10),
+  );
+  static const VerificationMeta _constitutionMeta = const VerificationMeta(
+    'constitution',
+  );
+  @override
+  late final GeneratedColumn<int> constitution = GeneratedColumn<int>(
+    'constitution',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(10),
+  );
+  static const VerificationMeta _intelligenceMeta = const VerificationMeta(
+    'intelligence',
+  );
+  @override
+  late final GeneratedColumn<int> intelligence = GeneratedColumn<int>(
+    'intelligence',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(10),
+  );
+  static const VerificationMeta _wisdomMeta = const VerificationMeta('wisdom');
+  @override
+  late final GeneratedColumn<int> wisdom = GeneratedColumn<int>(
+    'wisdom',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(10),
+  );
+  static const VerificationMeta _charismaMeta = const VerificationMeta(
+    'charisma',
+  );
+  @override
+  late final GeneratedColumn<int> charisma = GeneratedColumn<int>(
+    'charisma',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(10),
+  );
   static const VerificationMeta _spellSlotsJsonMeta = const VerificationMeta(
     'spellSlotsJson',
   );
@@ -2899,6 +2969,12 @@ class $CharacterInstancesTable extends CharacterInstances
     temporaryHp,
     armorClass,
     proficiencyBonus,
+    strength,
+    dexterity,
+    constitution,
+    intelligence,
+    wisdom,
+    charisma,
     spellSlotsJson,
     notes,
     createdAt,
@@ -2989,6 +3065,48 @@ class $CharacterInstancesTable extends CharacterInstances
         ),
       );
     }
+    if (data.containsKey('strength')) {
+      context.handle(
+        _strengthMeta,
+        strength.isAcceptableOrUnknown(data['strength']!, _strengthMeta),
+      );
+    }
+    if (data.containsKey('dexterity')) {
+      context.handle(
+        _dexterityMeta,
+        dexterity.isAcceptableOrUnknown(data['dexterity']!, _dexterityMeta),
+      );
+    }
+    if (data.containsKey('constitution')) {
+      context.handle(
+        _constitutionMeta,
+        constitution.isAcceptableOrUnknown(
+          data['constitution']!,
+          _constitutionMeta,
+        ),
+      );
+    }
+    if (data.containsKey('intelligence')) {
+      context.handle(
+        _intelligenceMeta,
+        intelligence.isAcceptableOrUnknown(
+          data['intelligence']!,
+          _intelligenceMeta,
+        ),
+      );
+    }
+    if (data.containsKey('wisdom')) {
+      context.handle(
+        _wisdomMeta,
+        wisdom.isAcceptableOrUnknown(data['wisdom']!, _wisdomMeta),
+      );
+    }
+    if (data.containsKey('charisma')) {
+      context.handle(
+        _charismaMeta,
+        charisma.isAcceptableOrUnknown(data['charisma']!, _charismaMeta),
+      );
+    }
     if (data.containsKey('spell_slots_json')) {
       context.handle(
         _spellSlotsJsonMeta,
@@ -3065,6 +3183,30 @@ class $CharacterInstancesTable extends CharacterInstances
         DriftSqlType.int,
         data['${effectivePrefix}proficiency_bonus'],
       ),
+      strength: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}strength'],
+      )!,
+      dexterity: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}dexterity'],
+      )!,
+      constitution: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}constitution'],
+      )!,
+      intelligence: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}intelligence'],
+      )!,
+      wisdom: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}wisdom'],
+      )!,
+      charisma: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}charisma'],
+      )!,
       spellSlotsJson: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
         data['${effectivePrefix}spell_slots_json'],
@@ -3106,6 +3248,17 @@ class CharacterInstanceRow extends DataClass
   final int? armorClass;
   final int? proficiencyBonus;
 
+  /// Ability scores (point-buy total + racial bonus, at creation time).
+  /// Instance-level rather than base-level: two instances of the same
+  /// character_base level up independently, so their scores can diverge
+  /// once Ability Score Improvements start being applied per instance.
+  final int strength;
+  final int dexterity;
+  final int constitution;
+  final int intelligence;
+  final int wisdom;
+  final int charisma;
+
   /// JSON map of spell-slot level -> {max, used}. Kept flexible until the
   /// character-sheet feature settles on its final shape.
   final String? spellSlotsJson;
@@ -3123,6 +3276,12 @@ class CharacterInstanceRow extends DataClass
     required this.temporaryHp,
     this.armorClass,
     this.proficiencyBonus,
+    required this.strength,
+    required this.dexterity,
+    required this.constitution,
+    required this.intelligence,
+    required this.wisdom,
+    required this.charisma,
     this.spellSlotsJson,
     this.notes,
     required this.createdAt,
@@ -3149,6 +3308,12 @@ class CharacterInstanceRow extends DataClass
     if (!nullToAbsent || proficiencyBonus != null) {
       map['proficiency_bonus'] = Variable<int>(proficiencyBonus);
     }
+    map['strength'] = Variable<int>(strength);
+    map['dexterity'] = Variable<int>(dexterity);
+    map['constitution'] = Variable<int>(constitution);
+    map['intelligence'] = Variable<int>(intelligence);
+    map['wisdom'] = Variable<int>(wisdom);
+    map['charisma'] = Variable<int>(charisma);
     if (!nullToAbsent || spellSlotsJson != null) {
       map['spell_slots_json'] = Variable<String>(spellSlotsJson);
     }
@@ -3180,6 +3345,12 @@ class CharacterInstanceRow extends DataClass
       proficiencyBonus: proficiencyBonus == null && nullToAbsent
           ? const Value.absent()
           : Value(proficiencyBonus),
+      strength: Value(strength),
+      dexterity: Value(dexterity),
+      constitution: Value(constitution),
+      intelligence: Value(intelligence),
+      wisdom: Value(wisdom),
+      charisma: Value(charisma),
       spellSlotsJson: spellSlotsJson == null && nullToAbsent
           ? const Value.absent()
           : Value(spellSlotsJson),
@@ -3207,6 +3378,12 @@ class CharacterInstanceRow extends DataClass
       temporaryHp: serializer.fromJson<int>(json['temporaryHp']),
       armorClass: serializer.fromJson<int?>(json['armorClass']),
       proficiencyBonus: serializer.fromJson<int?>(json['proficiencyBonus']),
+      strength: serializer.fromJson<int>(json['strength']),
+      dexterity: serializer.fromJson<int>(json['dexterity']),
+      constitution: serializer.fromJson<int>(json['constitution']),
+      intelligence: serializer.fromJson<int>(json['intelligence']),
+      wisdom: serializer.fromJson<int>(json['wisdom']),
+      charisma: serializer.fromJson<int>(json['charisma']),
       spellSlotsJson: serializer.fromJson<String?>(json['spellSlotsJson']),
       notes: serializer.fromJson<String?>(json['notes']),
       createdAt: serializer.fromJson<DateTime>(json['createdAt']),
@@ -3227,6 +3404,12 @@ class CharacterInstanceRow extends DataClass
       'temporaryHp': serializer.toJson<int>(temporaryHp),
       'armorClass': serializer.toJson<int?>(armorClass),
       'proficiencyBonus': serializer.toJson<int?>(proficiencyBonus),
+      'strength': serializer.toJson<int>(strength),
+      'dexterity': serializer.toJson<int>(dexterity),
+      'constitution': serializer.toJson<int>(constitution),
+      'intelligence': serializer.toJson<int>(intelligence),
+      'wisdom': serializer.toJson<int>(wisdom),
+      'charisma': serializer.toJson<int>(charisma),
       'spellSlotsJson': serializer.toJson<String?>(spellSlotsJson),
       'notes': serializer.toJson<String?>(notes),
       'createdAt': serializer.toJson<DateTime>(createdAt),
@@ -3245,6 +3428,12 @@ class CharacterInstanceRow extends DataClass
     int? temporaryHp,
     Value<int?> armorClass = const Value.absent(),
     Value<int?> proficiencyBonus = const Value.absent(),
+    int? strength,
+    int? dexterity,
+    int? constitution,
+    int? intelligence,
+    int? wisdom,
+    int? charisma,
     Value<String?> spellSlotsJson = const Value.absent(),
     Value<String?> notes = const Value.absent(),
     DateTime? createdAt,
@@ -3262,6 +3451,12 @@ class CharacterInstanceRow extends DataClass
     proficiencyBonus: proficiencyBonus.present
         ? proficiencyBonus.value
         : this.proficiencyBonus,
+    strength: strength ?? this.strength,
+    dexterity: dexterity ?? this.dexterity,
+    constitution: constitution ?? this.constitution,
+    intelligence: intelligence ?? this.intelligence,
+    wisdom: wisdom ?? this.wisdom,
+    charisma: charisma ?? this.charisma,
     spellSlotsJson: spellSlotsJson.present
         ? spellSlotsJson.value
         : this.spellSlotsJson,
@@ -3293,6 +3488,16 @@ class CharacterInstanceRow extends DataClass
       proficiencyBonus: data.proficiencyBonus.present
           ? data.proficiencyBonus.value
           : this.proficiencyBonus,
+      strength: data.strength.present ? data.strength.value : this.strength,
+      dexterity: data.dexterity.present ? data.dexterity.value : this.dexterity,
+      constitution: data.constitution.present
+          ? data.constitution.value
+          : this.constitution,
+      intelligence: data.intelligence.present
+          ? data.intelligence.value
+          : this.intelligence,
+      wisdom: data.wisdom.present ? data.wisdom.value : this.wisdom,
+      charisma: data.charisma.present ? data.charisma.value : this.charisma,
       spellSlotsJson: data.spellSlotsJson.present
           ? data.spellSlotsJson.value
           : this.spellSlotsJson,
@@ -3315,6 +3520,12 @@ class CharacterInstanceRow extends DataClass
           ..write('temporaryHp: $temporaryHp, ')
           ..write('armorClass: $armorClass, ')
           ..write('proficiencyBonus: $proficiencyBonus, ')
+          ..write('strength: $strength, ')
+          ..write('dexterity: $dexterity, ')
+          ..write('constitution: $constitution, ')
+          ..write('intelligence: $intelligence, ')
+          ..write('wisdom: $wisdom, ')
+          ..write('charisma: $charisma, ')
           ..write('spellSlotsJson: $spellSlotsJson, ')
           ..write('notes: $notes, ')
           ..write('createdAt: $createdAt, ')
@@ -3335,6 +3546,12 @@ class CharacterInstanceRow extends DataClass
     temporaryHp,
     armorClass,
     proficiencyBonus,
+    strength,
+    dexterity,
+    constitution,
+    intelligence,
+    wisdom,
+    charisma,
     spellSlotsJson,
     notes,
     createdAt,
@@ -3354,6 +3571,12 @@ class CharacterInstanceRow extends DataClass
           other.temporaryHp == this.temporaryHp &&
           other.armorClass == this.armorClass &&
           other.proficiencyBonus == this.proficiencyBonus &&
+          other.strength == this.strength &&
+          other.dexterity == this.dexterity &&
+          other.constitution == this.constitution &&
+          other.intelligence == this.intelligence &&
+          other.wisdom == this.wisdom &&
+          other.charisma == this.charisma &&
           other.spellSlotsJson == this.spellSlotsJson &&
           other.notes == this.notes &&
           other.createdAt == this.createdAt &&
@@ -3372,6 +3595,12 @@ class CharacterInstancesCompanion
   final Value<int> temporaryHp;
   final Value<int?> armorClass;
   final Value<int?> proficiencyBonus;
+  final Value<int> strength;
+  final Value<int> dexterity;
+  final Value<int> constitution;
+  final Value<int> intelligence;
+  final Value<int> wisdom;
+  final Value<int> charisma;
   final Value<String?> spellSlotsJson;
   final Value<String?> notes;
   final Value<DateTime> createdAt;
@@ -3388,6 +3617,12 @@ class CharacterInstancesCompanion
     this.temporaryHp = const Value.absent(),
     this.armorClass = const Value.absent(),
     this.proficiencyBonus = const Value.absent(),
+    this.strength = const Value.absent(),
+    this.dexterity = const Value.absent(),
+    this.constitution = const Value.absent(),
+    this.intelligence = const Value.absent(),
+    this.wisdom = const Value.absent(),
+    this.charisma = const Value.absent(),
     this.spellSlotsJson = const Value.absent(),
     this.notes = const Value.absent(),
     this.createdAt = const Value.absent(),
@@ -3405,6 +3640,12 @@ class CharacterInstancesCompanion
     this.temporaryHp = const Value.absent(),
     this.armorClass = const Value.absent(),
     this.proficiencyBonus = const Value.absent(),
+    this.strength = const Value.absent(),
+    this.dexterity = const Value.absent(),
+    this.constitution = const Value.absent(),
+    this.intelligence = const Value.absent(),
+    this.wisdom = const Value.absent(),
+    this.charisma = const Value.absent(),
     this.spellSlotsJson = const Value.absent(),
     this.notes = const Value.absent(),
     this.createdAt = const Value.absent(),
@@ -3423,6 +3664,12 @@ class CharacterInstancesCompanion
     Expression<int>? temporaryHp,
     Expression<int>? armorClass,
     Expression<int>? proficiencyBonus,
+    Expression<int>? strength,
+    Expression<int>? dexterity,
+    Expression<int>? constitution,
+    Expression<int>? intelligence,
+    Expression<int>? wisdom,
+    Expression<int>? charisma,
     Expression<String>? spellSlotsJson,
     Expression<String>? notes,
     Expression<DateTime>? createdAt,
@@ -3440,6 +3687,12 @@ class CharacterInstancesCompanion
       if (temporaryHp != null) 'temporary_hp': temporaryHp,
       if (armorClass != null) 'armor_class': armorClass,
       if (proficiencyBonus != null) 'proficiency_bonus': proficiencyBonus,
+      if (strength != null) 'strength': strength,
+      if (dexterity != null) 'dexterity': dexterity,
+      if (constitution != null) 'constitution': constitution,
+      if (intelligence != null) 'intelligence': intelligence,
+      if (wisdom != null) 'wisdom': wisdom,
+      if (charisma != null) 'charisma': charisma,
       if (spellSlotsJson != null) 'spell_slots_json': spellSlotsJson,
       if (notes != null) 'notes': notes,
       if (createdAt != null) 'created_at': createdAt,
@@ -3459,6 +3712,12 @@ class CharacterInstancesCompanion
     Value<int>? temporaryHp,
     Value<int?>? armorClass,
     Value<int?>? proficiencyBonus,
+    Value<int>? strength,
+    Value<int>? dexterity,
+    Value<int>? constitution,
+    Value<int>? intelligence,
+    Value<int>? wisdom,
+    Value<int>? charisma,
     Value<String?>? spellSlotsJson,
     Value<String?>? notes,
     Value<DateTime>? createdAt,
@@ -3476,6 +3735,12 @@ class CharacterInstancesCompanion
       temporaryHp: temporaryHp ?? this.temporaryHp,
       armorClass: armorClass ?? this.armorClass,
       proficiencyBonus: proficiencyBonus ?? this.proficiencyBonus,
+      strength: strength ?? this.strength,
+      dexterity: dexterity ?? this.dexterity,
+      constitution: constitution ?? this.constitution,
+      intelligence: intelligence ?? this.intelligence,
+      wisdom: wisdom ?? this.wisdom,
+      charisma: charisma ?? this.charisma,
       spellSlotsJson: spellSlotsJson ?? this.spellSlotsJson,
       notes: notes ?? this.notes,
       createdAt: createdAt ?? this.createdAt,
@@ -3517,6 +3782,24 @@ class CharacterInstancesCompanion
     if (proficiencyBonus.present) {
       map['proficiency_bonus'] = Variable<int>(proficiencyBonus.value);
     }
+    if (strength.present) {
+      map['strength'] = Variable<int>(strength.value);
+    }
+    if (dexterity.present) {
+      map['dexterity'] = Variable<int>(dexterity.value);
+    }
+    if (constitution.present) {
+      map['constitution'] = Variable<int>(constitution.value);
+    }
+    if (intelligence.present) {
+      map['intelligence'] = Variable<int>(intelligence.value);
+    }
+    if (wisdom.present) {
+      map['wisdom'] = Variable<int>(wisdom.value);
+    }
+    if (charisma.present) {
+      map['charisma'] = Variable<int>(charisma.value);
+    }
     if (spellSlotsJson.present) {
       map['spell_slots_json'] = Variable<String>(spellSlotsJson.value);
     }
@@ -3548,6 +3831,12 @@ class CharacterInstancesCompanion
           ..write('temporaryHp: $temporaryHp, ')
           ..write('armorClass: $armorClass, ')
           ..write('proficiencyBonus: $proficiencyBonus, ')
+          ..write('strength: $strength, ')
+          ..write('dexterity: $dexterity, ')
+          ..write('constitution: $constitution, ')
+          ..write('intelligence: $intelligence, ')
+          ..write('wisdom: $wisdom, ')
+          ..write('charisma: $charisma, ')
           ..write('spellSlotsJson: $spellSlotsJson, ')
           ..write('notes: $notes, ')
           ..write('createdAt: $createdAt, ')
@@ -7957,6 +8246,12 @@ typedef $$CharacterInstancesTableCreateCompanionBuilder =
       Value<int> temporaryHp,
       Value<int?> armorClass,
       Value<int?> proficiencyBonus,
+      Value<int> strength,
+      Value<int> dexterity,
+      Value<int> constitution,
+      Value<int> intelligence,
+      Value<int> wisdom,
+      Value<int> charisma,
       Value<String?> spellSlotsJson,
       Value<String?> notes,
       Value<DateTime> createdAt,
@@ -7975,6 +8270,12 @@ typedef $$CharacterInstancesTableUpdateCompanionBuilder =
       Value<int> temporaryHp,
       Value<int?> armorClass,
       Value<int?> proficiencyBonus,
+      Value<int> strength,
+      Value<int> dexterity,
+      Value<int> constitution,
+      Value<int> intelligence,
+      Value<int> wisdom,
+      Value<int> charisma,
       Value<String?> spellSlotsJson,
       Value<String?> notes,
       Value<DateTime> createdAt,
@@ -8118,6 +8419,36 @@ class $$CharacterInstancesTableFilterComposer
 
   ColumnFilters<int> get proficiencyBonus => $composableBuilder(
     column: $table.proficiencyBonus,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get strength => $composableBuilder(
+    column: $table.strength,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get dexterity => $composableBuilder(
+    column: $table.dexterity,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get constitution => $composableBuilder(
+    column: $table.constitution,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get intelligence => $composableBuilder(
+    column: $table.intelligence,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get wisdom => $composableBuilder(
+    column: $table.wisdom,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get charisma => $composableBuilder(
+    column: $table.charisma,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -8269,6 +8600,36 @@ class $$CharacterInstancesTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
+  ColumnOrderings<int> get strength => $composableBuilder(
+    column: $table.strength,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get dexterity => $composableBuilder(
+    column: $table.dexterity,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get constitution => $composableBuilder(
+    column: $table.constitution,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get intelligence => $composableBuilder(
+    column: $table.intelligence,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get wisdom => $composableBuilder(
+    column: $table.wisdom,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get charisma => $composableBuilder(
+    column: $table.charisma,
+    builder: (column) => ColumnOrderings(column),
+  );
+
   ColumnOrderings<String> get spellSlotsJson => $composableBuilder(
     column: $table.spellSlotsJson,
     builder: (column) => ColumnOrderings(column),
@@ -8358,6 +8719,28 @@ class $$CharacterInstancesTableAnnotationComposer
     column: $table.proficiencyBonus,
     builder: (column) => column,
   );
+
+  GeneratedColumn<int> get strength =>
+      $composableBuilder(column: $table.strength, builder: (column) => column);
+
+  GeneratedColumn<int> get dexterity =>
+      $composableBuilder(column: $table.dexterity, builder: (column) => column);
+
+  GeneratedColumn<int> get constitution => $composableBuilder(
+    column: $table.constitution,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<int> get intelligence => $composableBuilder(
+    column: $table.intelligence,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<int> get wisdom =>
+      $composableBuilder(column: $table.wisdom, builder: (column) => column);
+
+  GeneratedColumn<int> get charisma =>
+      $composableBuilder(column: $table.charisma, builder: (column) => column);
 
   GeneratedColumn<String> get spellSlotsJson => $composableBuilder(
     column: $table.spellSlotsJson,
@@ -8495,6 +8878,12 @@ class $$CharacterInstancesTableTableManager
                 Value<int> temporaryHp = const Value.absent(),
                 Value<int?> armorClass = const Value.absent(),
                 Value<int?> proficiencyBonus = const Value.absent(),
+                Value<int> strength = const Value.absent(),
+                Value<int> dexterity = const Value.absent(),
+                Value<int> constitution = const Value.absent(),
+                Value<int> intelligence = const Value.absent(),
+                Value<int> wisdom = const Value.absent(),
+                Value<int> charisma = const Value.absent(),
                 Value<String?> spellSlotsJson = const Value.absent(),
                 Value<String?> notes = const Value.absent(),
                 Value<DateTime> createdAt = const Value.absent(),
@@ -8511,6 +8900,12 @@ class $$CharacterInstancesTableTableManager
                 temporaryHp: temporaryHp,
                 armorClass: armorClass,
                 proficiencyBonus: proficiencyBonus,
+                strength: strength,
+                dexterity: dexterity,
+                constitution: constitution,
+                intelligence: intelligence,
+                wisdom: wisdom,
+                charisma: charisma,
                 spellSlotsJson: spellSlotsJson,
                 notes: notes,
                 createdAt: createdAt,
@@ -8529,6 +8924,12 @@ class $$CharacterInstancesTableTableManager
                 Value<int> temporaryHp = const Value.absent(),
                 Value<int?> armorClass = const Value.absent(),
                 Value<int?> proficiencyBonus = const Value.absent(),
+                Value<int> strength = const Value.absent(),
+                Value<int> dexterity = const Value.absent(),
+                Value<int> constitution = const Value.absent(),
+                Value<int> intelligence = const Value.absent(),
+                Value<int> wisdom = const Value.absent(),
+                Value<int> charisma = const Value.absent(),
                 Value<String?> spellSlotsJson = const Value.absent(),
                 Value<String?> notes = const Value.absent(),
                 Value<DateTime> createdAt = const Value.absent(),
@@ -8545,6 +8946,12 @@ class $$CharacterInstancesTableTableManager
                 temporaryHp: temporaryHp,
                 armorClass: armorClass,
                 proficiencyBonus: proficiencyBonus,
+                strength: strength,
+                dexterity: dexterity,
+                constitution: constitution,
+                intelligence: intelligence,
+                wisdom: wisdom,
+                charisma: charisma,
                 spellSlotsJson: spellSlotsJson,
                 notes: notes,
                 createdAt: createdAt,

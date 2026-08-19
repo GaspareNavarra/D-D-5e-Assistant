@@ -57,6 +57,17 @@ class CharacterInstances extends Table {
   IntColumn get armorClass => integer().nullable()();
   IntColumn get proficiencyBonus => integer().nullable()();
 
+  /// Ability scores (point-buy total + racial bonus, at creation time).
+  /// Instance-level rather than base-level: two instances of the same
+  /// character_base level up independently, so their scores can diverge
+  /// once Ability Score Improvements start being applied per instance.
+  IntColumn get strength => integer().withDefault(const Constant(10))();
+  IntColumn get dexterity => integer().withDefault(const Constant(10))();
+  IntColumn get constitution => integer().withDefault(const Constant(10))();
+  IntColumn get intelligence => integer().withDefault(const Constant(10))();
+  IntColumn get wisdom => integer().withDefault(const Constant(10))();
+  IntColumn get charisma => integer().withDefault(const Constant(10))();
+
   /// JSON map of spell-slot level -> {max, used}. Kept flexible until the
   /// character-sheet feature settles on its final shape.
   TextColumn get spellSlotsJson => text().nullable()();
