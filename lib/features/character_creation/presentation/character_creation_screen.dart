@@ -65,7 +65,7 @@ class CharacterCreationScreen extends ConsumerWidget {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md),
+              padding: const EdgeInsets.fromLTRB(AppSpacing.md, 0, AppSpacing.md, AppSpacing.md),
               child: StepperDots(stepCount: _stepLabels.length, currentIndex: step),
             ),
             Expanded(
