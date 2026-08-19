@@ -12,40 +12,44 @@ import 'point_buy.dart';
 /// guidance in the meantime.
 String classPrimaryAbility(String className) {
   switch (className) {
-    case 'Wizard':
+    case 'Mago':
       return 'INT';
-    case 'Cleric':
-      return 'WIS';
+    case 'Chierico':
+    case 'Druido':
+      return 'SAG';
     case 'Ranger':
-    case 'Rogue':
-      return 'DEX';
-    case 'Bard':
-      return 'CHA';
+    case 'Ladro':
+    case 'Monaco':
+      return 'DES';
+    case 'Bardo':
+    case 'Stregone':
+    case 'Warlock':
+      return 'CAR';
     default:
-      return 'STR';
+      return 'FOR';
   }
 }
 
 const Map<String, String> abilityRoleReason = {
-  'STR': 'attacco e danni in mischia',
-  'DEX': 'attacco, CA e furtività',
-  'CON': 'i punti ferita',
+  'FOR': 'attacco e danni in mischia',
+  'DES': 'attacco, CA e furtività',
+  'COS': 'i punti ferita',
   'INT': "l'attacco con gli incantesimi",
-  'WIS': 'percezione e incantesimi',
-  'CHA': 'incantesimi e interazioni sociali',
+  'SAG': 'percezione e incantesimi',
+  'CAR': 'incantesimi e interazioni sociali',
 };
 
 /// A deterministic point-buy suggestion: max the class's primary ability,
-/// then CON (survivability matters for every build), then spread
+/// then COS (survivability matters for every build), then spread
 /// whatever's left over the rest — never exceeding the point-buy budget.
 Map<String, int> suggestAbilityScores(String className) {
   final primary = classPrimaryAbility(className);
   final scores = defaultScores();
 
   scores[primary] = pointBuyMax;
-  if (primary != 'CON') scores['CON'] = 14;
+  if (primary != 'COS') scores['COS'] = 14;
 
-  final fillOrder = ['WIS', 'DEX', 'INT', 'CHA', 'STR', 'CON'].where((a) => a != primary).toList();
+  final fillOrder = ['SAG', 'DES', 'INT', 'CAR', 'FOR', 'COS'].where((a) => a != primary).toList();
 
   var spent = totalPointsSpent(scores);
   var guard = 0;

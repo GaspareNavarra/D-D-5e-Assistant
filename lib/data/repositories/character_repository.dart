@@ -62,12 +62,12 @@ class CharacterRepository {
             CharacterInstancesCompanion.insert(
               id: instanceId,
               characterBaseId: baseId,
-              strength: Value(abilityScores['STR'] ?? 10),
-              dexterity: Value(abilityScores['DEX'] ?? 10),
-              constitution: Value(abilityScores['CON'] ?? 10),
+              strength: Value(abilityScores['FOR'] ?? 10),
+              dexterity: Value(abilityScores['DES'] ?? 10),
+              constitution: Value(abilityScores['COS'] ?? 10),
               intelligence: Value(abilityScores['INT'] ?? 10),
-              wisdom: Value(abilityScores['WIS'] ?? 10),
-              charisma: Value(abilityScores['CHA'] ?? 10),
+              wisdom: Value(abilityScores['SAG'] ?? 10),
+              charisma: Value(abilityScores['CAR'] ?? 10),
             ),
           );
     } catch (_) {

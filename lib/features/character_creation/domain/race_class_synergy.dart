@@ -45,13 +45,13 @@ List<SynergyPoint> computeRaceClassSynergy({required ClassRow classRow, required
 
 String _guessCastingAbility(String className) {
   switch (className) {
-    case 'Wizard':
+    case 'Mago':
       return 'INT';
-    case 'Cleric':
+    case 'Chierico':
     case 'Ranger':
-    case 'Druid':
-      return 'WIS';
+    case 'Druido':
+      return 'SAG';
     default:
-      return 'CHA';
+      return 'CAR';
   }
 }

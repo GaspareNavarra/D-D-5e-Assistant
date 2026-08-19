@@ -130,7 +130,7 @@ class _AdviceCard extends StatelessWidget {
               Expanded(
                 child: Text(
                   'Per un ${classRow.name} con razza ${raceRow.name} conviene $primary ${suggestion[primary]} '
-                  '${primary != 'CON' ? "e CON ${suggestion['CON']}" : ''}: il $primary regge $reason.',
+                  '${primary != 'COS' ? "e COS ${suggestion['COS']}" : ''}: il $primary regge $reason.',
                   style: textTheme.bodyMedium,
                 ),
               ),
@@ -146,7 +146,7 @@ class _AdviceCard extends StatelessWidget {
                 onPressed: () => ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
                     content: Text(
-                      "Suggerimento basato sulle regole ($primary per $reason, CON per i punti ferita) — non ancora "
+                      "Suggerimento basato sulle regole ($primary per $reason, COS per i punti ferita) — non ancora "
                       "generato da un'IA reale.",
                     ),
                   ),

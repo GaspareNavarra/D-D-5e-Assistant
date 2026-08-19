@@ -48,7 +48,7 @@ ClassData decodeClassData(String? json) {
 
 /// Typed view of a [Races] row's [RaceRow.dataJson].
 class RaceData {
-  /// Ability abbreviation ('STR'..'CHA') -> bonus.
+  /// Ability abbreviation ('FOR'..'CAR', Italian) -> bonus.
   final Map<String, int> abilityBonuses;
 
   const RaceData({required this.abilityBonuses});

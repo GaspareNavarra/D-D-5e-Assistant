@@ -4,15 +4,19 @@
 /// knows the cost curve).
 library;
 
-const List<String> abilityOrder = ['STR', 'DEX', 'CON', 'INT', 'WIS', 'CHA'];
+/// Italian ability abbreviations (FOR/DES/COS/INT/SAG/CAR) — used as the
+/// key everywhere an ability is referenced, not just for display, so
+/// there's a single source of truth instead of a translation layer
+/// bolted on top of English keys.
+const List<String> abilityOrder = ['FOR', 'DES', 'COS', 'INT', 'SAG', 'CAR'];
 
 const Map<String, String> abilityLabels = {
-  'STR': 'Forza',
-  'DEX': 'Destrezza',
-  'CON': 'Costituzione',
+  'FOR': 'Forza',
+  'DES': 'Destrezza',
+  'COS': 'Costituzione',
   'INT': 'Intelligenza',
-  'WIS': 'Saggezza',
-  'CHA': 'Carisma',
+  'SAG': 'Saggezza',
+  'CAR': 'Carisma',
 };
 
 const int pointBuyMin = 8;

@@ -7,26 +7,33 @@ import '../../../data/local/tables/class_race_data_codec.dart';
 /// for anything not in the map (custom entries included).
 IconData classIcon(String name) {
   return switch (name) {
-    'Barbarian' => PhosphorIconsRegular.fire,
-    'Bard' => PhosphorIconsRegular.musicNotes,
-    'Cleric' => PhosphorIconsRegular.shield,
-    'Fighter' => PhosphorIconsRegular.sword,
-    'Paladin' => PhosphorIconsRegular.sparkle,
+    'Barbaro' => PhosphorIconsRegular.fire,
+    'Bardo' => PhosphorIconsRegular.musicNotes,
+    'Chierico' => PhosphorIconsRegular.shield,
+    'Guerriero' => PhosphorIconsRegular.sword,
+    'Paladino' => PhosphorIconsRegular.sparkle,
     'Ranger' => PhosphorIconsRegular.treeEvergreen,
-    'Rogue' => PhosphorIconsRegular.maskHappy,
-    'Wizard' => PhosphorIconsRegular.flask,
+    'Ladro' => PhosphorIconsRegular.maskHappy,
+    'Mago' => PhosphorIconsRegular.flask,
+    'Druido' => PhosphorIconsRegular.leaf,
+    'Monaco' => PhosphorIconsRegular.handFist,
+    'Stregone' => PhosphorIconsRegular.flame,
+    'Warlock' => PhosphorIconsRegular.eyeClosed,
     _ => PhosphorIconsRegular.userCircle,
   };
 }
 
 IconData raceIcon(String name) {
   return switch (name) {
-    'Human' => PhosphorIconsRegular.personSimple,
-    'Elf (Wood)' || 'Elf (High)' => PhosphorIconsRegular.leaf,
-    'Dwarf (Hill)' || 'Dwarf (Mountain)' => PhosphorIconsRegular.mountains,
-    'Halfling (Lightfoot)' => PhosphorIconsRegular.footprints,
-    'Half-Elf' => PhosphorIconsRegular.personSimple,
+    'Umano' => PhosphorIconsRegular.personSimple,
+    'Elfo dei Boschi' || 'Alto Elfo' || 'Elfo Scuro' => PhosphorIconsRegular.leaf,
+    'Nano delle Colline' || 'Nano delle Montagne' => PhosphorIconsRegular.mountains,
+    'Halfling Piedelesto' || 'Halfling Tascorobusto' => PhosphorIconsRegular.footprints,
+    'Mezzelfo' => PhosphorIconsRegular.personSimple,
     'Tiefling' => PhosphorIconsRegular.fire,
+    'Dragonide' => PhosphorIconsRegular.scales,
+    'Gnomo delle Foreste' || 'Gnomo delle Rocce' => PhosphorIconsRegular.gear,
+    'Mezzorco' => PhosphorIconsRegular.sword,
     _ => PhosphorIconsRegular.userCircle,
   };
 }

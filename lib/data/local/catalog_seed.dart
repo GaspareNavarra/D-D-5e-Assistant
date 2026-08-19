@@ -18,9 +18,9 @@ Future<void> seedCatalogIfEmpty(AppDatabase db) async {
     await db.batch((batch) {
       batch.insertAll(db.classes, [
         _class(
-          'Barbarian',
+          'Barbaro',
           hitDie: 12,
-          savingThrows: ['STR', 'CON'],
+          savingThrows: ['FOR', 'COS'],
           spellcasting: 'none',
           skillChoices: 2,
           description:
@@ -28,9 +28,9 @@ Future<void> seedCatalogIfEmpty(AppDatabase db) async {
               'tattici. Buona scelta per chi vuole restare sempre in prima linea.',
         ),
         _class(
-          'Bard',
+          'Bardo',
           hitDie: 8,
-          savingThrows: ['DEX', 'CHA'],
+          savingThrows: ['DES', 'CAR'],
           spellcasting: 'full',
           skillChoices: 3,
           description:
@@ -38,9 +38,9 @@ Future<void> seedCatalogIfEmpty(AppDatabase db) async {
               'al gruppo grazie a ispirazione ed effetti sociali.',
         ),
         _class(
-          'Cleric',
+          'Chierico',
           hitDie: 8,
-          savingThrows: ['WIS', 'CHA'],
+          savingThrows: ['SAG', 'CAR'],
           spellcasting: 'full',
           skillChoices: 2,
           description:
@@ -48,9 +48,9 @@ Future<void> seedCatalogIfEmpty(AppDatabase db) async {
               'Buona scelta per chi vuole un ruolo di supporto affidabile.',
         ),
         _class(
-          'Fighter',
+          'Guerriero',
           hitDie: 10,
-          savingThrows: ['STR', 'CON'],
+          savingThrows: ['FOR', 'COS'],
           spellcasting: 'none',
           skillChoices: 2,
           description:
@@ -58,9 +58,9 @@ Future<void> seedCatalogIfEmpty(AppDatabase db) async {
               'primo personaggio per chi vuole concentrarsi sul combattimento.',
         ),
         _class(
-          'Paladin',
+          'Paladino',
           hitDie: 10,
-          savingThrows: ['WIS', 'CHA'],
+          savingThrows: ['SAG', 'CAR'],
           spellcasting: 'partial',
           skillChoices: 2,
           description:
@@ -70,7 +70,7 @@ Future<void> seedCatalogIfEmpty(AppDatabase db) async {
         _class(
           'Ranger',
           hitDie: 10,
-          savingThrows: ['STR', 'DEX'],
+          savingThrows: ['FOR', 'DES'],
           spellcasting: 'partial',
           skillChoices: 3,
           description:
@@ -78,9 +78,9 @@ Future<void> seedCatalogIfEmpty(AppDatabase db) async {
               'incantesimi di natura. Buona scelta come primo personaggio: poche risorse da gestire a ogni turno.',
         ),
         _class(
-          'Rogue',
+          'Ladro',
           hitDie: 8,
-          savingThrows: ['DEX', 'INT'],
+          savingThrows: ['DES', 'INT'],
           spellcasting: 'none',
           skillChoices: 4,
           description:
@@ -88,14 +88,54 @@ Future<void> seedCatalogIfEmpty(AppDatabase db) async {
               'guai con abilità. Nessun incantesimo, molte opzioni non in combattimento.',
         ),
         _class(
-          'Wizard',
+          'Mago',
           hitDie: 6,
-          savingThrows: ['INT', 'WIS'],
+          savingThrows: ['INT', 'SAG'],
           spellcasting: 'full',
           skillChoices: 2,
           description:
               'Studioso della magia arcana: il ventaglio di incantesimi più ampio del gioco, ma fragile in '
               'mischia. Richiede più attenzione nella gestione delle risorse.',
+        ),
+        _class(
+          'Druido',
+          hitDie: 8,
+          savingThrows: ['INT', 'SAG'],
+          spellcasting: 'full',
+          skillChoices: 2,
+          description:
+              "Tramite della natura selvaggia: incantesimi legati a elementi e creature, più la capacità di "
+              "assumere forma animale. Buona scelta per chi vuole magia versatile fuori dai canoni arcani.",
+        ),
+        _class(
+          'Monaco',
+          hitDie: 8,
+          savingThrows: ['FOR', 'DES'],
+          spellcasting: 'none',
+          skillChoices: 2,
+          description:
+              'Combattente a mani nude che incanala energia interiore (ki): mobilità e colpi rapidi al posto '
+              "dell'armatura pesante. Richiede gestione attenta delle risorse di ki turno per turno.",
+        ),
+        _class(
+          'Stregone',
+          hitDie: 6,
+          savingThrows: ['COS', 'CAR'],
+          spellcasting: 'full',
+          skillChoices: 2,
+          description:
+              'Incantatore con magia innata nel sangue: meno incantesimi conosciuti del Mago ma la possibilità di '
+              'plasmarli con la metamagia. Fragile in mischia, richiede attenzione nella gestione dei punti stregoneria.',
+        ),
+        _class(
+          'Warlock',
+          hitDie: 8,
+          savingThrows: ['SAG', 'CAR'],
+          spellcasting: 'full',
+          skillChoices: 2,
+          description:
+              'Incantatore legato a un patto con un\'entità superiore: pochi slot incantesimo ma sempre al livello '
+              'più alto disponibile, oltre a invocazioni occulte personalizzabili. Stile di gioco compatto e diretto.',
         ),
       ]);
     });
@@ -106,60 +146,102 @@ Future<void> seedCatalogIfEmpty(AppDatabase db) async {
     await db.batch((batch) {
       batch.insertAll(db.races, [
         _race(
-          'Human',
-          bonuses: {'STR': 1, 'DEX': 1, 'CON': 1, 'INT': 1, 'WIS': 1, 'CHA': 1},
+          'Umano',
+          bonuses: {'FOR': 1, 'DES': 1, 'COS': 1, 'INT': 1, 'SAG': 1, 'CAR': 1},
           description:
               'Versatili e adattabili: un piccolo bonus a tutte le caratteristiche, nessuna specializzazione '
               'marcata. Ottima scelta se non vuoi vincoli sulla build.',
         ),
         _race(
-          'Elf (Wood)',
-          bonuses: {'DEX': 2, 'WIS': 1},
+          'Elfo dei Boschi',
+          bonuses: {'DES': 2, 'SAG': 1},
           description:
               'Elfo dei boschi, veloce e furtivo: bonus a Destrezza e Saggezza, affinità con la natura. '
               'Sinergizza bene con classi di mischia leggera o incantatori naturali.',
         ),
         _race(
-          'Elf (High)',
-          bonuses: {'DEX': 2, 'INT': 1},
+          'Alto Elfo',
+          bonuses: {'DES': 2, 'INT': 1},
           description:
               'Elfo colto e agile: bonus a Destrezza e Intelligenza, un trucchetto arcano innato. Sinergizza '
               "bene con classi che lanciano incantesimi con l'Intelligenza.",
         ),
         _race(
-          'Dwarf (Hill)',
-          bonuses: {'CON': 2, 'WIS': 1},
+          'Nano delle Colline',
+          bonuses: {'COS': 2, 'SAG': 1},
           description:
               'Nano resistente e saggio: bonus a Costituzione e Saggezza, resistenza al veleno. Sinergizza bene '
               'con classi che si affidano alla Saggezza.',
         ),
         _race(
-          'Dwarf (Mountain)',
-          bonuses: {'CON': 2, 'STR': 2},
+          'Nano delle Montagne',
+          bonuses: {'COS': 2, 'FOR': 2},
           description:
               'Nano forgiato per la battaglia: forte bonus a Costituzione e Forza, competenza con armature. '
               'Ottimo per build di mischia pesante.',
         ),
         _race(
-          'Halfling (Lightfoot)',
-          bonuses: {'DEX': 2, 'CHA': 1},
+          'Halfling Piedelesto',
+          bonuses: {'DES': 2, 'CAR': 1},
           description:
               'Piccoli, fortunati e difficili da colpire: bonus a Destrezza e Carisma, capacità di passare '
               'inosservati. Sinergizza bene con classi agili o carismatiche.',
         ),
         _race(
-          'Half-Elf',
-          bonuses: {'CHA': 2},
+          'Mezzelfo',
+          bonuses: {'CAR': 2},
           description:
               'Un piede in due mondi: bonus a Carisma, competenze extra. Flessibile con qualunque classe basata '
               'sul Carisma.',
         ),
         _race(
           'Tiefling',
-          bonuses: {'INT': 1, 'CHA': 2},
+          bonuses: {'INT': 1, 'CAR': 2},
           description:
               'Discendenza infernale ben visibile: bonus a Intelligenza e Carisma, resistenza al fuoco e un '
               'incantesimo innato. Sinergizza bene con classi arcane o carismatiche.',
+        ),
+        _race(
+          'Elfo Scuro',
+          bonuses: {'DES': 2, 'CAR': 1},
+          description:
+              'Elfo delle profondità, abituato al buio: bonus a Destrezza e Carisma, scurovisione superiore e '
+              'magia innata legata a Lolth. Sinergizza bene con classi agili o carismatiche.',
+        ),
+        _race(
+          'Halfling Tascorobusto',
+          bonuses: {'DES': 2, 'COS': 1},
+          description:
+              'Halfling più robusto della media, resistente al veleno: bonus a Destrezza e Costituzione. Buona '
+              'scelta per un halfling più incline alla mischia.',
+        ),
+        _race(
+          'Dragonide',
+          bonuses: {'FOR': 2, 'CAR': 1},
+          description:
+              'Discendente umanoide dei draghi: bonus a Forza e Carisma, soffio elementale e resistenza al danno '
+              'associato. Ottimo per build di mischia carismatiche.',
+        ),
+        _race(
+          'Gnomo delle Foreste',
+          bonuses: {'INT': 2, 'DES': 1},
+          description:
+              'Piccolo e furtivo, a suo agio nei boschi: bonus a Intelligenza e Destrezza, capacità di parlare '
+              'con le piccole bestie. Sinergizza bene con incantatori arcani agili.',
+        ),
+        _race(
+          'Gnomo delle Rocce',
+          bonuses: {'INT': 2, 'COS': 1},
+          description:
+              'Ingegnoso e resistente: bonus a Intelligenza e Costituzione, talento per piccoli congegni '
+              'meccanici. Sinergizza bene con classi arcane che vogliono un po\' più di resistenza.',
+        ),
+        _race(
+          'Mezzorco',
+          bonuses: {'FOR': 2, 'COS': 1},
+          description:
+              'Forte e resistente, cresciuto tra due mondi: bonus a Forza e Costituzione, attacchi implacabili '
+              'in punto di morte. Ottimo per build di mischia pesante.',
         ),
       ]);
     });
